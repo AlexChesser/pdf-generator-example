@@ -57,8 +57,6 @@ var HomeView = Backbone.View.extend({
     initialize: function() {
         this.$button = this.$el.find('#generate');
         this.$url = this.$el.find('#url');
-        this.$urlemail = this.$el.find('#url-email');
-        this.$urlShare = this.$el.find('#url-share');
         this.$raw = this.$el.find('#rawhtml');
         this.$html = this.$el.find('#html');
         this.$display = this.$el.find('#display');
@@ -104,7 +102,7 @@ var HomeView = Backbone.View.extend({
         progressShow();
         /* generate pdf using url. */
         pdf.htmlToPDF({
-            url: this.$urlShare.val(),
+            url: this.$url.val(),
             documentSize: "A4",
             landscape: "portrait",
             type: "share"
