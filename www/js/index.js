@@ -33,6 +33,17 @@ function success(msg) {
     progressHide();
 };
 
+function attachEmail(msg) {
+    progressHide();
+    cordova.plugins.email.open({
+        subject: 'Sample converted PDF',
+        body:    '<h1>Sample converted PDF attachment</h1>',
+        isHtml:  true,
+        attachments: 'base64:your-pdf.pdf//'+msg
+    });
+};
+
+
 function failure(err) {
     console.error('->', err);
     console.alert('An error has ocurred: ', err);
@@ -46,6 +57,7 @@ var HomeView = Backbone.View.extend({
     initialize: function() {
         this.$button = this.$el.find('#generate');
         this.$url = this.$el.find('#url');
+        this.$urlemail = this.$el.find('#url-email');
         this.$urlShare = this.$el.find('#url-share');
         this.$raw = this.$el.find('#rawhtml');
         this.$html = this.$el.find('#html');
@@ -53,10 +65,12 @@ var HomeView = Backbone.View.extend({
 
         this.success = success.bind(this);
         this.failure = failure.bind(this);
+        this.email = attachEmail.bind(this);
     },
 
     events: {
         'click #generate': 'makePDFBase64',
+        'click #email': 'makePDFAndEmail',
         'click #share': 'makePDFAndShare',
         'click #share-raw': 'makeRawPDFandShare',
     },
@@ -69,8 +83,20 @@ var HomeView = Backbone.View.extend({
             url: this.$url.val(),
             documentSize: "A4",
             landscape: "portrait",
-            type: "base64"
+            type: "base64" 
         }, this.success, this.failure);
+    },
+
+    makePDFAndEmail: function(e) {
+        e.preventDefault();
+        progressShow();
+        /* generate pdf using url. */
+        pdf.htmlToPDF({
+            url: this.$url.val(),
+            documentSize: "A4",
+            landscape: "portrait",
+            type: "base64"
+        }, this.email, this.failure);
     },
 
     makePDFAndShare: function(e) {
