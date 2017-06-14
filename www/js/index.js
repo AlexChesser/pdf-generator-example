@@ -39,7 +39,8 @@ function attachEmail(msg) {
         subject: 'Sample converted PDF',
         body:    '<h1>Sample converted PDF attachment</h1>',
         isHtml:  true,
-        attachments: 'base64:your-pdf.pdf//'+msg
+        // dash in filename does not work in IOS.
+        attachments: 'base64:HtmlToPDF.pdf//'+msg
     });
 };
 
